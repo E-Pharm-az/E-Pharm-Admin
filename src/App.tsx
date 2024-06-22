@@ -5,6 +5,8 @@ import StorefrontLayout from "@/components/StorefrontLayout.tsx";
 import Login from "@/components/Login.tsx";
 import NotFound from "@/components/NotFound.tsx";
 import AuthLayout from "@/components/AuthLayout.tsx";
+import PortalSelector from "@/components/PortalSelector.tsx";
+import Navbar from "@/components/Navbar.tsx";
 
 function App() {
   return (
@@ -17,8 +19,11 @@ function App() {
         <Route path="*" element={<NotFound />} />
 
         <Route element={<RequireAuth />}>
-          <Route path="/storefront" element={<StorefrontLayout />}>
-            <Route path="" element={<h1>Storefront</h1>} />
+          <Route element={<Navbar />}>
+            <Route path="/select-portal" element={<PortalSelector />} />
+            <Route path="/storefront" element={<StorefrontLayout />}>
+              <Route path="" element={<h1>Storefront</h1>} />
+            </Route>
           </Route>
         </Route>
       </Route>

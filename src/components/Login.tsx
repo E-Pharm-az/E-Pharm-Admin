@@ -22,7 +22,7 @@ const Login = () => {
   const { setAuth, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/select-portal";
   const { setError } = useContext(ErrorContext);
   const { loading, setLoading } = useContext(LoaderContext);
 
@@ -87,7 +87,7 @@ const Login = () => {
         </h1>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-        <div className="grid gap-2">
+        <div className="grid gap-1">
           <Input
             type="email"
             label="Email"
@@ -97,6 +97,11 @@ const Login = () => {
             className={errors.email && "border-red-500 focus:border-red-500"}
             {...register("email", { required: true })}
           />
+          <label className="w-full h-3 text-xs text-red-500">
+            {errors.email?.type === "required" && "Required"}
+          </label>
+        </div>
+        <div className="grid gap-1">
           <Input
             label="Password"
             type="password"

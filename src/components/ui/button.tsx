@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "hover:translate-y-1 bg-accent text-white border-2 border-lime-500 hover:bg-lime-700 hover:border-lime-600 hover:text-opacity-80 disabled:translate-y-1 disabled:bg-lime-700 disabled:border-lime-600 disabled:text-opacity-80 disabled:cursor-not-allowed",
+          "hover:translate-y-1 bg-neutral-800 text-white border-2 border-neutral-700 hover:bg-neutral-700 hover:border-neutral-600 hover:text-opacity-80 disabled:translate-y-1 disabled:bg-neutral-700 disabled:border-neutral-600 disabled:text-opacity-80 disabled:cursor-not-allowed",
       },
       size: {
         default: "text-sm px-5 py-2.5 gap-2",
@@ -34,13 +34,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
 
     return (
-      <div className="relative w-full">
+      <div className="relative w-full z-10">
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
           {...props}
         ></Comp>
-        <div className="absolute -z-10 -bottom-1 h-4 w-full rounded-lg bg-accent" />
+        <div className="absolute -z-10 -bottom-1 h-4 w-full rounded-lg bg-neutral-800" />
       </div>
     );
   },
