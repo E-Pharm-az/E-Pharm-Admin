@@ -5,7 +5,7 @@ import useRefreshToken from "./useRefreshToken.ts";
 
 const useAxiosPrivate = () => {
   const refreshToken = useRefreshToken();
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
 
   useEffect(() => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
@@ -25,11 +25,21 @@ const useAxiosPrivate = () => {
 
         if (error.response?.status === 401 && !prevRequest._retry) {
           prevRequest._retry = true;
-          const newToken = await refreshToken();
-          prevRequest.headers.Authorization = `Bearer ${newToken}`;
+          try {
+            const newToken = await refreshToken();
+            prevRequest.headers.Authorization = `Bearer ${newToken}`;
 
-          return axiosPrivate(prevRequest);
+            return axiosPrivate(prevRequest);
+          } catch (refreshError) {
+            logout();
+            return Promise.reject(refreshError);
+          }
         }
+
+        if (error.response?.status === 401) {
+          logout();
+        }
+
         return Promise.reject(error);
       },
     );
@@ -38,7 +48,7 @@ const useAxiosPrivate = () => {
       axiosPrivate.interceptors.response.eject(responseInterceptor);
       axiosPrivate.interceptors.request.eject(requestInterceptor);
     };
-  }, [auth, refreshToken]);
+  }, [auth, refreshToken, logout]);
 
   return axiosPrivate;
 };

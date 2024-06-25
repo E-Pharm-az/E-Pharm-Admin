@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { AxiosError } from "axios";
 import AuthContext, {
@@ -22,7 +22,7 @@ const Login = () => {
   const { setAuth, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/select-portal";
+  const from = location.state?.from?.pathname || "/dashboard";
   const { setError } = useContext(ErrorContext);
   const { loading, setLoading } = useContext(LoaderContext);
 
@@ -86,7 +86,7 @@ const Login = () => {
           Login to panel
         </h1>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
         <div className="grid gap-1">
           <Input
             type="email"
@@ -114,11 +114,6 @@ const Login = () => {
           <label className="w-full h-3 text-xs text-red-500">
             {errors.password?.type === "required" && "Required"}
           </label>
-          <Link to="/change-password">
-            <p className="text-sm text-gray-500 font-medium text-primary-600 hover:underline">
-              Forgot password?
-            </p>
-          </Link>
         </div>
         <Button type="submit" disabled={loading}>
           Continue
