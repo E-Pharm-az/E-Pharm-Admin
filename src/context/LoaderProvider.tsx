@@ -22,7 +22,7 @@ export const LoaderProvider: FC<{ children: ReactNode }> = ({ children }) => {
     <LoaderContext.Provider value={contextValue}>
       <AnimatePresence>
         {loading && (
-          <motion.div
+            <motion.div
             className="fixed top-0 left-0 h-1 z-50 bg-accent"
             initial={{ width: 0 }}
             animate={{
