@@ -63,11 +63,11 @@ const Pharmacies = () => {
 
   return (
     <>
-      <div className="flex item-center justify-between w-full p-2">
+      <div className="flex item-center justify-between w-full mb-8">
         <h1 className="text-3xl font-medium">Pharmacies</h1>
         <div className="w-min">
           <Link to="/dashboard/pharmacies/invite-pharmacy">
-            <Button>Add pharmacy</Button>
+            <Button>Add Pharmacy</Button>
           </Link>
         </div>
       </div>

@@ -13,7 +13,7 @@ const Sidebar = () => {
       </div>
       <Separator />
       <Link
-        to={"/dashboard"}
+        to="/dashboard"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard"
             ? "bg-accent-secondary text-white text-primary hover:text-white"
@@ -23,7 +23,7 @@ const Sidebar = () => {
         <Home className="h-7 w-6" />
       </Link>
       <Link
-        to={"pharmacies"}
+        to="pharmacies"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/pharmacies"
             ? "bg-accent-secondary text-white text-primary hover:text-white"
@@ -33,9 +33,9 @@ const Sidebar = () => {
         <Building2 className="h-6 w-6" />
       </Link>
       <Link
-        to={"meds"}
+        to="clinical-info"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
-          location.pathname === "/dashboard/meds"
+          location.pathname === "/dashboard/clinical-info"
             ? "bg-accent-secondary text-white text-primary hover:text-white"
             : "text-muted-foreground"
         }`}
