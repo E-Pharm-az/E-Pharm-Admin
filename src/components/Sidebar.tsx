@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator.tsx";
 import { Link, useLocation } from "react-router-dom";
-import { Building2, Home } from "lucide-react";
+import { Building2, Home, Pill } from "lucide-react";
 import Logo from "@/assets/logo.png";
 
 const Sidebar = () => {
@@ -31,6 +31,16 @@ const Sidebar = () => {
         }`}
       >
         <Building2 className="h-6 w-6" />
+      </Link>
+      <Link
+        to={"meds"}
+        className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
+          location.pathname === "/dashboard/meds"
+            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            : "text-muted-foreground"
+        }`}
+      >
+        <Pill className="h-6 w-6" />
       </Link>
     </nav>
   );
