@@ -8,11 +8,9 @@ import {
   AlertOctagon,
   ShieldAlert,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ClinicalInformation = () => {
-  const navigate = useNavigate();
-
   const cards = [
     {
       title: "Allergies",
@@ -69,10 +67,9 @@ const ClinicalInformation = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            onClick={() => navigate(card.link)}
             className="bg-white border-2 border-accent-secondary rounded-lg p-6 shadow-sm
                        hover:shadow-md transition-all duration-300 ease-in-out
-                       group flex flex-col justify-between hover:cursor-pointer
+                       group flex flex-col justify-between
                        hover:bg-gradient-to-br from-white to-accent-secondary/10"
           >
             <div className="flex items-center mb-4 transform group-hover:translate-x-1 transition-transform duration-300">
@@ -85,7 +82,7 @@ const ClinicalInformation = () => {
               {card.description}
             </p>
             <Link to={card.link} className="ml-auto">
-              <Button size="icon">
+              <Button variant="outline" size="icon">
                 <Edit className="w-4 h-4" />
               </Button>
             </Link>

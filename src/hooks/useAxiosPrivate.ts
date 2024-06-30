@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { axiosPrivate } from "../services/api-client.ts";
-import AuthContext from "../context/AuthFormProvider.tsx";
+import AuthContext from "../context/AuthProvider.tsx";
 import useRefreshToken from "./useRefreshToken.ts";
 
 const useAxiosPrivate = () => {

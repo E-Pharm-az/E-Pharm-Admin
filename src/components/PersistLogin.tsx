@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import useRefreshToken from "../hooks/useRefreshToken.ts";
 import { Outlet } from "react-router-dom";
 import { Loader } from "lucide-react";
-import AuthContext from "../context/AuthFormProvider.tsx";
+import AuthContext from "../context/AuthProvider.tsx";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);

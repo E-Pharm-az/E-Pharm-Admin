@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import AuthContext, {
   TokenPayload,
   TokenResponse,
-} from "@/context/AuthFormProvider.tsx";
+} from "@/context/AuthProvider.tsx";
 import ErrorContext from "@/context/ErrorProvider.tsx";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import { useForm } from "react-hook-form";

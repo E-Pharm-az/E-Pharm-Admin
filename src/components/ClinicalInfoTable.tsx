@@ -1,16 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { DataTable } from "@/components/data-table.tsx";
 import { useContext, useEffect, useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogPortal,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
@@ -21,54 +18,26 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useForm } from "react-hook-form";
 
-interface Allergy {
+interface ClinicalInfoItem {
   id: number;
   name: string;
 }
 
-interface FormData {
-  name: string;
+interface ClinicalInfoTableProps {
+  title: string;
+  endpoint: string;
+  columns: ColumnDef<ClinicalInfoItem>[];
 }
 
-const columns: ColumnDef<Allergy>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
-  },
-  {
-    id: "related-products",
-    cell: () => <Button variant="outline">Products with this allergy</Button>,
-  },
-];
-
-const Allergies = () => {
+const ClinicalInfoTable = ({
+  title,
+  endpoint,
+  columns,
+}: ClinicalInfoTableProps) => {
   const axiosPrivate = useAxiosPrivate();
   const { loading, setLoading } = useContext(LoaderContext);
   const { setError } = useContext(ErrorContext);
-  const [allergies, setAllergies] = useState<Allergy[]>([]);
+  const [items, setItems] = useState<ClinicalInfoItem[]>([]);
 
   const {
     register,
@@ -76,7 +45,7 @@ const Allergies = () => {
     formState: { errors },
     setFocus,
     setValue,
-  } = useForm<FormData>();
+  } = useForm<{ name: string }>();
 
   useEffect(() => {
     setFocus("name");
@@ -85,8 +54,10 @@ const Allergies = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axiosPrivate.get<Allergy[]>(`/allergy`);
-        setAllergies(response.data);
+        const response = await axiosPrivate.get<ClinicalInfoItem[]>(
+          `/${endpoint}`,
+        );
+        setItems(response.data);
         setLoading(false);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -100,16 +71,18 @@ const Allergies = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [endpoint]);
 
-  // TODO: Add soner when adding new allergy
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: { name: string }) => {
     setLoading(true);
     try {
-      const response = await axiosPrivate.post<Allergy>(`/allergy`, {
-        name: data.name,
-      });
-      setAllergies([...allergies, response.data]);
+      const response = await axiosPrivate.post<ClinicalInfoItem>(
+        `/${endpoint}`,
+        {
+          name: data.name,
+        },
+      );
+      setItems([...items, response.data]);
     } catch (error) {
       if (error instanceof AxiosError) {
         setError(error.message);
@@ -125,23 +98,23 @@ const Allergies = () => {
   return (
     <>
       <div className="flex item-center justify-between w-full mb-8">
-        <h1 className="text-3xl font-medium">Allergies</h1>
+        <h1 className="text-3xl font-medium">{title}</h1>
         <Dialog>
           <DialogTrigger asChild>
-            <Button>Add Allergy</Button>
+            <Button>Add {title.slice(0, -1)}</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <form onSubmit={handleSubmit(onSubmit)}>
               <DialogHeader>
-                <DialogTitle>Add Allergy</DialogTitle>
+                <DialogTitle>Add {title.slice(0, -1)}</DialogTitle>
                 <DialogDescription>
-                  Add a new global allergy for pharmacies to use.
+                  Add a new global {title.toLowerCase()} for pharmacies to use.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-1 py-4">
                 <Input
                   {...register("name", { required: "Required" })}
-                  label="Allergy name"
+                  label={`${title.slice(0, -1)} name`}
                 />
                 <label className="w-full h-3 text-xs text-red-500">
                   {errors.name?.type === "required" && "Required"}
@@ -156,13 +129,14 @@ const Allergies = () => {
       </div>
       <div>
         <DataTable
-          name="Allergies"
+          name={title}
           columns={columns}
-          data={allergies}
+          data={items}
           isLoading={loading}
         />
       </div>
     </>
   );
 };
-export default Allergies;
+
+export default ClinicalInfoTable;

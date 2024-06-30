@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import AuthContext, {
   TokenPayload,
   TokenResponse,
-} from "../context/AuthFormProvider.tsx";
+} from "../context/AuthProvider.tsx";
 
 const useRefreshToken = () => {
   const { setAuth } = useContext(AuthContext);
