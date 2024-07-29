@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator.tsx";
 import { Link, useLocation } from "react-router-dom";
-import { Building2, Home, Pill } from "lucide-react";
+import {Building2, Home, Package, Pill} from "lucide-react";
 import Logo from "@/assets/logo.png";
 
 const Sidebar = () => {
@@ -23,7 +23,7 @@ const Sidebar = () => {
         <Home className="h-7 w-6" />
       </Link>
       <Link
-        to="pharmacies"
+        to="/dashboard/pharmacies"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/pharmacies"
             ? "bg-accent-secondary text-white text-primary hover:text-white"
@@ -33,7 +33,17 @@ const Sidebar = () => {
         <Building2 className="h-6 w-6" />
       </Link>
       <Link
-        to="clinical-info"
+        to="/dashboard/products"
+        className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
+          location.pathname === "/dashboard/products"
+            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            : "text-muted-foreground"
+        }`}
+      >
+        <Package className="h-6 w-6" />
+      </Link>
+      <Link
+        to="/dashboard/clinical-info"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/clinical-info"
             ? "bg-accent-secondary text-white text-primary hover:text-white"

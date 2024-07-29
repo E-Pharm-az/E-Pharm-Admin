@@ -12,6 +12,7 @@ import RegisterPharmacy from "@/components/RegisterPharmacy.tsx";
 import ClinicalInformation from "@/components/ClinicalInformation.tsx";
 import Allergies from "@/components/Allergies.tsx";
 import Dashboard from "@/components/Dashboard.tsx";
+import Products from "@/components/Products.tsx";
 
 function App() {
   return (
@@ -29,14 +30,9 @@ function App() {
             <Route path="dashboard" element={<DashboardLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="pharmacies" element={<Pharmacies />} />
-              <Route
-                path="pharmacies/invite-pharmacy"
-                element={<InvitePharmacy />}
-              />
-              <Route
-                path="pharmacies/register"
-                element={<RegisterPharmacy />}
-              />
+              <Route path="pharmacies/invite-pharmacy" element={<InvitePharmacy />}/>
+              <Route path="pharmacies/register" element={<RegisterPharmacy />}/>
+              <Route path="products" element={<Products />}/>
               <Route path="clinical-info" element={<ClinicalInformation />} />
               <Route path="clinical-info/allergies" element={<Allergies />} />
             </Route>
