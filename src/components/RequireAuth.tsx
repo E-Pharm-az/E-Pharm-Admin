@@ -1,20 +1,22 @@
-import { useContext } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import AuthContext from "../context/AuthProvider.tsx";
+import {Outlet, useNavigate} from "react-router-dom";
+import { useContext, useEffect } from "react";
+import AuthProvider from "@/context/AuthProvider.tsx";
 
 const RequireAuth = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  const location = useLocation();
+  const { isAuthenticated, isRefreshing } = useContext(AuthProvider);
+  const navigate = useNavigate();
 
-  return (
-    <>
-      {isAuthenticated() ? (
-        <Outlet />
-      ) : (
-        <Navigate to="/login" state={{ from: location }} replace />
-      )}
-    </>
-  );
+  useEffect(() => {
+    if (!isRefreshing && !isAuthenticated()) {
+      navigate("/login", { replace: true });
+    }
+  }, [isRefreshing, isAuthenticated, navigate]);
+
+  if (isRefreshing) {
+    return <></>;
+  }
+
+  return isAuthenticated() ? <Outlet /> : null;
 };
 
 export default RequireAuth;

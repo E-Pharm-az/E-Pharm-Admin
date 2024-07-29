@@ -11,6 +11,7 @@ import InvitePharmacy from "@/components/InvitePharmacy.tsx";
 import RegisterPharmacy from "@/components/RegisterPharmacy.tsx";
 import ClinicalInformation from "@/components/ClinicalInformation.tsx";
 import Allergies from "@/components/Allergies.tsx";
+import Dashboard from "@/components/Dashboard.tsx";
 
 function App() {
   return (
@@ -18,22 +19,28 @@ function App() {
       <RemoveTrailingSlash />
       <Routes>
         <Route element={<PersistLogin />}>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
 
-        <Route element={<RequireAuth />}>
-        <Route path="dashboard" element={<DashboardLayout />}>
-          <Route index element={<h1>Dashboard</h1>} />
-          <Route path="pharmacies" element={<Pharmacies />} />
-          <Route path="pharmacies/invite-pharmacy" element={<InvitePharmacy />}/>
-          <Route path="pharmacies/register" element={<RegisterPharmacy />} />
-          <Route path="clinical-info" element={<ClinicalInformation />} />
-          <Route path="clinical-info/allergies" element={<Allergies />} />
-        </Route>
-        </Route>
+          <Route element={<RequireAuth />}>
+            <Route path="dashboard" element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="pharmacies" element={<Pharmacies />} />
+              <Route
+                path="pharmacies/invite-pharmacy"
+                element={<InvitePharmacy />}
+              />
+              <Route
+                path="pharmacies/register"
+                element={<RegisterPharmacy />}
+              />
+              <Route path="clinical-info" element={<ClinicalInformation />} />
+              <Route path="clinical-info/allergies" element={<Allergies />} />
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </>

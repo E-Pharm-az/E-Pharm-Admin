@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
 import LoaderContext from "@/context/LoaderProvider.tsx";
-import ErrorContext from "@/context/ErrorProvider.tsx";
+import ErrorProvider from "@/context/ErrorProvider.tsx";
 import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
@@ -36,7 +36,7 @@ const ClinicalInfoTable = ({
 }: ClinicalInfoTableProps) => {
   const axiosPrivate = useAxiosPrivate();
   const { loading, setLoading } = useContext(LoaderContext);
-  const { setError } = useContext(ErrorContext);
+  const { setError } = useContext(ErrorProvider);
   const [items, setItems] = useState<ClinicalInfoItem[]>([]);
 
   const {

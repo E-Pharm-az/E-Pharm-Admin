@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input.tsx";
 import { useContext, useEffect } from "react";
-import ErrorContext from "@/context/ErrorProvider.tsx";
+import ErrorProvider from "@/context/ErrorProvider.tsx";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
@@ -15,7 +15,7 @@ interface FormData {
 
 const InvitePharmacy = () => {
   const navigate = useNavigate();
-  const { setError } = useContext(ErrorContext);
+  const { setError } = useContext(ErrorProvider);
   const { loading, setLoading } = useContext(LoaderContext);
   const axiosPrivate = useAxiosPrivate();
 

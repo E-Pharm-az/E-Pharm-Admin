@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
-import {useState} from "react";
-import {ColumnDef} from "@tanstack/react-table";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
-import {DataTable} from "@/components/data-table.tsx";
+import {useContext, useEffect, useState} from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { DataTable } from "@/components/data-table.tsx";
+import {Plus} from "lucide-react";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
+import LoaderContext from "@/context/LoaderProvider.tsx";
+import ErrorContext from "@/context/ErrorProvider.tsx";
+import {AxiosError} from "axios";
 
 interface Pharmacy {
   id: number;
@@ -11,7 +16,7 @@ interface Pharmacy {
   tin: string;
   phone: string;
   email: string;
-  address: string
+  address: string;
 }
 
 const columns: ColumnDef<Pharmacy>[] = [
@@ -50,36 +55,52 @@ const columns: ColumnDef<Pharmacy>[] = [
 ];
 
 const Pharmacies = () => {
-    const [pharmacies, setPharamcies] = useState<Pharmacy[]>([
-      {
-        id: 1,
-        name: "Company",
-        tin: "123",
-        phone: "123123",
-        email: "email@gmail.com",
-        address: "Address 1",
-      },
-    ]);
+  const axiosPrivate = useAxiosPrivate();
+  const { setLoading } = useContext(LoaderContext);
+  const { setError } = useContext(ErrorContext);
+  const [pharmacies, setPharamcies] = useState<Pharmacy[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate.get<Pharmacy[]>(`/pharmacy`);
+        setPharamcies(response.data);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            if (error.response.status !== 404) {
+              setError(error.response?.data);
+            }
+          }
+        } else {
+          setError("Unexpected error");
+        }
+      }
+      finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   return (
-    <>
-      <div className="flex item-center justify-between w-full mb-8">
-        <h1 className="text-3xl font-medium">Pharmacies</h1>
-        <div className="w-min">
+    <div className="p-6 space-y-6 h-full">
+      <div className="flex items-center justify-between">
+        <h1 className="text-lg font-semibold md:text-2xl">Pharmacies</h1>
+        <Button asChild>
           <Link to="/dashboard/pharmacies/invite-pharmacy">
-            <Button>Add Pharmacy</Button>
+            <Plus className="w-4 h-4" />
+            <p>Add Pharmacy</p>
           </Link>
-        </div>
+        </Button>
       </div>
-      <div>
-        <DataTable
-          name="Pharmacies"
-          columns={columns}
-          data={pharmacies}
-          isLoading={false}
-        />
-      </div>
-    </>
+      <DataTable
+        name="Pharmacies"
+        columns={columns}
+        data={pharmacies}
+        isLoading={false}
+      />
+    </div>
   );
 };
 export default Pharmacies;

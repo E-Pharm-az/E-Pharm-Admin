@@ -26,7 +26,6 @@ import {
   Search,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input.tsx";
 import {
   Popover,
   PopoverContent,
@@ -35,6 +34,7 @@ import {
 import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import {FormInput} from "@/components/ui/form-input.tsx";
 
 interface DataTableProps<TData, TValue> {
   name: string;
@@ -47,7 +47,6 @@ export function DataTable<TData, TValue>({
   name,
   columns,
   data,
-  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -110,8 +109,8 @@ export function DataTable<TData, TValue>({
         {showSearch && (
           <div className="relative items-center w-full">
             <Search className="absolute h-3.5 w-3.5 left-2.5 top-2.5 text-muted-foreground" />
-            <Input
-              label={`Searching all ${name}`}
+            <FormInput
+              placeholder={`Searching all ${name.toLowerCase()}`}
               value={
                 (table.getColumn("name")?.getFilterValue() as string) ?? ""
               }
