@@ -16,7 +16,7 @@ const Sidebar = () => {
         to="/dashboard"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard"
-            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            ? "bg-brand-secondary text-white text-primary hover:text-white"
             : "text-muted-foreground"
         }`}
       >
@@ -26,7 +26,7 @@ const Sidebar = () => {
         to="/dashboard/pharmacies"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/pharmacies"
-            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            ? "bg-brand-secondary text-white text-primary hover:text-white"
             : "text-muted-foreground"
         }`}
       >
@@ -36,7 +36,7 @@ const Sidebar = () => {
         to="/dashboard/products"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/products"
-            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            ? "bg-brand-secondary text-white text-primary hover:text-white"
             : "text-muted-foreground"
         }`}
       >
@@ -46,7 +46,7 @@ const Sidebar = () => {
         to="/dashboard/clinical-info"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/clinical-info"
-            ? "bg-accent-secondary text-white text-primary hover:text-white"
+            ? "bg-brand-secondary text-white text-primary hover:text-white"
             : "text-muted-foreground"
         }`}
       >

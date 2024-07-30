@@ -40,6 +40,10 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        brand: {
           DEFAULT: "#233D4C",
           secondary: "#619C8A",
         },

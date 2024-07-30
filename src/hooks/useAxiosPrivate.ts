@@ -9,9 +9,9 @@ const useAxiosPrivate = () => {
 
   useEffect(() => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
-      async (config) => {
-        if (!config.headers["Authorization"]) {
-          config.headers.Authorization = `Bearer ${auth?.tokenResponse.token}`;
+      (config) => {
+        if (!config.withCredentials) {
+          config.withCredentials = true;
         }
         return config;
       },
