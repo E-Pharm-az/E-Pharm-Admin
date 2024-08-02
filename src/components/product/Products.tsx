@@ -6,8 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import ErrorContext from "@/context/ErrorProvider.tsx";
 import { AxiosError } from "axios";
-import { DataTable } from "@/components/data-table.tsx";
-import ProductView from "@/components/ProductView.tsx";
+import { DataTable } from "@/components/ui/data-table.tsx";
+import ProductView from "@/components/product/ProductView.tsx";
 import {Product} from "@/types/product.ts";
 
 const columns: ColumnDef<Product>[] = [

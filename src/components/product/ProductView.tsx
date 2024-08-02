@@ -6,14 +6,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
 import { Check, Clock, Copy, Loader } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import ErrorContext from "@/context/ErrorProvider";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { Product } from "@/types/product";
+import { Label } from "@/components/ui/label.tsx";
+import ErrorContext from "@/context/ErrorProvider.tsx";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
+import { Product } from "@/types/product.ts";
 
 interface Props {
   productId: number;
@@ -119,6 +119,7 @@ const ProductViewContent: FC<Props> = ({ productId }) => {
 
   const fetchProduct = useCallback(async (): Promise<Product> => {
     const response = await axiosPrivate.get<Product>(`/product/${productId}`);
+    console.log(response.data);
     return response.data;
   }, [axiosPrivate, productId]);
 
@@ -178,7 +179,7 @@ const ProductViewContent: FC<Props> = ({ productId }) => {
           { label: "ID", value: product.id },
           { label: "NAME", value: product.name },
           { label: "DESCRIPTION", value: product.description },
-          { label: "STRENGTH", value: product.strengthMG },
+          { label: "STRENGTH", value: product.strengthMg },
           {
             label: "CONTRAINDICATIONS DESCRIPTION",
             value: product.contraindicationsDescription,

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import { DataTable } from "@/components/data-table.tsx";
+import { DataTable } from "@/components/ui/data-table.tsx";
 import {Plus} from "lucide-react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
 import LoaderContext from "@/context/LoaderProvider.tsx";

@@ -13,16 +13,6 @@ const Sidebar = () => {
       </div>
       <Separator />
       <Link
-        to="/dashboard"
-        className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
-          location.pathname === "/dashboard"
-            ? "bg-brand-secondary text-white text-primary hover:text-white"
-            : "text-muted-foreground"
-        }`}
-      >
-        <Home className="h-7 w-6" />
-      </Link>
-      <Link
         to="/dashboard/pharmacies"
         className={`flex justify-center items-center p-3 rounded-lg transition-colors hover:text-primary ${
           location.pathname === "/dashboard/pharmacies"

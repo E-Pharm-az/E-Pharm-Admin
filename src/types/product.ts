@@ -15,7 +15,7 @@ export interface Product extends BaseEntity {
   imageUrl?: string;
   isApproved: boolean;
   ApprovedByAdminId?: string;
-  strengthMG: number;
+  strengthMg: number;
   contraindicationsDescription: string;
   storageConditionDescription: string;
   price: number;
