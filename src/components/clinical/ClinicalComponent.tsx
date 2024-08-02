@@ -1,32 +1,24 @@
-import React, { FC } from "react";
-import {Routes, Route, Link} from "react-router-dom";
-import { LucideIcon } from "lucide-react";
+import {FC} from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { BaseEntity } from "@/types/base-entity.ts";
+import { LucideIcon } from "lucide-react";
 
-interface Props<T extends BaseEntity> {
+interface Props {
   title: string;
   description: string;
   icon: LucideIcon;
   link: string;
-  form: React.ComponentType<{ onSubmit: (data: Partial<T>) => Promise<void> }>;
-  route: string;
 }
 
-const ClinicalInfoTable = React.lazy(() => import("./ClinicalInfoTable"));
-
-const ClinicalComponent = <T extends BaseEntity>({
+const ClinicalComponent: FC<Props> = ({
   title,
   description,
   icon: Icon,
   link,
-  route,
-  form,
-}: Props<T>) => {
-
-  const Card: FC = () => (
-    <div className="bg-white border-2 border-brand-secondary grid gap-4  rounded-lg p-6 shadow-sm">
+}) => {
+  return (
+    <div className="bg-white border-2 border-brand-secondary grid gap-4 rounded-lg p-6 shadow-sm">
       <div className="flex items-center">
         <Icon className="w-6 h-6 mr-3 text-brand" />
         <h2 className="text-lg font-semibold text-brand">{title}</h2>
@@ -41,20 +33,6 @@ const ClinicalComponent = <T extends BaseEntity>({
         </Button>
       </div>
     </div>
-  );
-
-  return (
-    <Routes>
-      <Route index element={<Card />} />
-      <Route
-        path={route}
-        element={
-          <React.Suspense fallback={<div>Loading...</div>}>
-            <ClinicalInfoTable<T> title={title} endpoint={route} form={form} />
-          </React.Suspense>
-        }
-      />
-    </Routes>
   );
 };
 

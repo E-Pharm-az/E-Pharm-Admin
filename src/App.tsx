@@ -10,7 +10,22 @@ import Pharmacies from "@/components/pharmacy/Pharmacies.tsx";
 import InvitePharmacy from "@/components/pharmacy/InvitePharmacy.tsx";
 import RegisterPharmacy from "@/components/pharmacy/RegisterPharmacy.tsx";
 import Products from "@/components/product/Products.tsx";
-import { ClinicalInfoRoutes } from "@/components/clinical/ClinicalInfoRoutes.tsx";
+import ClinicalInfo from "@/components/clinical/ClinicalInfo.tsx";
+import ClinicalInfoPage from "@/components/clinical/ClinicalInfoPage.tsx";
+import {
+  Allergy,
+  DosageForm,
+  Indication,
+  RouteOfAdministration,
+  SideEffect,
+  UsageWarning,
+} from "@/types/product-attributes.ts";
+import { AllergiesForm } from "@/components/clinical/forms/AllergiesForm.tsx";
+import { DosageFormForm } from "@/components/clinical/forms/DosageFormForm.tsx";
+import { IndicationForm } from "@/components/clinical/forms/IndicationForm.tsx";
+import { RouteOfAdministrationForm } from "@/components/clinical/forms/RouteOfAdministrationForm.tsx";
+import { UsageWarningForm } from "@/components/clinical/forms/UsageWarningForm.tsx";
+import { SideEffectForm } from "@/components/clinical/forms/SideEffectForm.tsx";
 
 function App() {
   return (
@@ -47,7 +62,56 @@ function App() {
                   />
                 }
               />
-              {/* Add more clinical info routes here */}
+              <Route
+                path="clinical-info/dosage-form"
+                element={
+                  <ClinicalInfoPage<DosageForm>
+                    title="Dosage form"
+                    endpoint="dosage-forms"
+                    form={DosageFormForm}
+                  />
+                }
+              />
+              <Route
+                path="clinical-info/indication"
+                element={
+                  <ClinicalInfoPage<Indication>
+                    title="Indication"
+                    endpoint="indications"
+                    form={IndicationForm}
+                  />
+                }
+              />
+              <Route
+                path="clinical-info/route-of-administration"
+                element={
+                  <ClinicalInfoPage<RouteOfAdministration>
+                    title="Route of administration"
+                    endpoint="roa"
+                    form={RouteOfAdministrationForm}
+                  />
+                }
+              />
+              <Route
+                path="clinical-info/side-effect"
+                element={
+                  <ClinicalInfoPage<SideEffect>
+                    title="Side effect"
+                    endpoint="side-effects"
+                    form={SideEffectForm}
+                  />
+                }
+              />
+              <Route
+                path="clinical-info/usage-warning"
+                element={
+                  <ClinicalInfoPage<UsageWarning>
+                    title="Usage warning"
+                    endpoint="usage-warnings"
+                    form={UsageWarningForm}
+                  />
+                }
+              />
             </Route>
           </Route>
         </Route>
@@ -55,3 +119,5 @@ function App() {
     </>
   );
 }
+
+export default App;
