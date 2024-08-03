@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext, useEffect, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import {
   Dialog,
@@ -9,117 +9,26 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
-import { Check, Clock, Copy, Loader } from "lucide-react";
+import { Clock, Loader } from "lucide-react";
 import { Label } from "@/components/ui/label.tsx";
 import ErrorContext from "@/context/ErrorProvider.tsx";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
 import { Product } from "@/types/product.ts";
+import { ProductValue } from "@/components/product/ProductValue.tsx";
+import CustomTable from "@/components/product/CustomTable.tsx";
 
 interface Props {
   productId: number;
+  onApprove: () => void;
 }
 
-interface ValueProp {
-  value: string | number | null;
-}
-
-const ProductValue: FC<ValueProp> = ({ value }) => {
-  const [isCopied, setIsCopied] = useState(false);
-
-  const handleCopy = async () => {
-    if (value) {
-      try {
-        await navigator.clipboard.writeText(value.toString());
-        setIsCopied(true);
-      } catch (err) {
-        console.error("Failed to copy: ", err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isCopied) {
-      const timer = setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isCopied]);
-
-  const renderContent = () => {
-    if (!value) {
-      return <p>NULL</p>;
-    }
-
-    return (
-      <>
-        <p>{value}</p>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="p-0"
-          onClick={handleCopy}
-        >
-          {isCopied ? (
-            <Check className="w-4 h-4 text-green-500" />
-          ) : (
-            <Copy className="w-4 h-4" />
-          )}
-        </Button>
-      </>
-    );
-  };
-
-  return (
-    <div className="flex h-12 w-full rounded-md border px-3 py-2 text-sm border-input bg-background items-center justify-between">
-      {renderContent()}
-    </div>
-  );
-};
-
-interface CustomTableProps {
-  title: string;
-  data: Record<string, any>;
-}
-
-const CustomTable: FC<CustomTableProps> = ({ title, data }) => {
-  const formatKey = (key: string): string => {
-    return key
-      .split(/(?=[A-Z])/)
-      .map((word) => word.toUpperCase())
-      .join(" ");
-  };
-
-  return (
-    <div className="grid gap-2 w-full">
-      <Label>{title.toUpperCase()}</Label>
-      <table className="w-full border border-input rounded-md">
-        <tbody>
-          {Object.entries(data).map(([key, value]) => (
-            <tr key={key} className="border-b w-full">
-              <td className="p-2 w-1/2">
-                <Label>{formatKey(key)}</Label>
-              </td>
-              <td className="py-2 px-4 w-1/2">
-                <ProductValue value={value} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-const ProductViewContent: FC<Props> = ({ productId }) => {
+const ProductViewContent: FC<Props> = ({ productId, onApprove }) => {
   const { setError } = useContext(ErrorContext);
   const axiosPrivate = useAxiosPrivate();
   const [showModal, setShowModal] = useState(false);
 
   const fetchProduct = useCallback(async (): Promise<Product> => {
-    const response = await axiosPrivate.get<Product>(`/product/${productId}`);
-    console.log(response.data);
+    const response = await axiosPrivate.get<Product>(`/products/${productId}`);
     return response.data;
   }, [axiosPrivate, productId]);
 
@@ -135,11 +44,11 @@ const ProductViewContent: FC<Props> = ({ productId }) => {
 
   const handleApproveProduct = async () => {
     try {
-      await axiosPrivate.post(`/product/approve/${productId}`);
+      await axiosPrivate.post(`/products/approve/${productId}`);
+      onApprove();
     } catch (err) {
       setError("Failed to approve product");
-    }
-    finally {
+    } finally {
       setShowModal(false);
     }
   };

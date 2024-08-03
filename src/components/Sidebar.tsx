@@ -4,16 +4,10 @@ import { Building2, LogOut, Package, Pill } from "lucide-react";
 import Logo from "@/assets/logo.png";
 import AuthContext from "@/context/AuthProvider.tsx";
 import { useContext } from "react";
-import { axiosPrivate } from "@/services/api-client.ts";
 
 const Sidebar = () => {
   const location = useLocation();
   const { logout } = useContext(AuthContext);
-
-  const handleLogout = async () => {
-    await axiosPrivate.post("/auth/logout");
-    logout();
-  };
 
   return (
     <nav className="bg-white text-sm font-medium m-4 flex flex-col h-[calc(100vh-2rem)] justify-between">
@@ -84,7 +78,7 @@ const Sidebar = () => {
       </div>
       <div className="mt-auto">
         <button
-          onClick={handleLogout}
+          onClick={logout}
           className="p-3 rounded-lg transition-colors hover:text-primary hover:bg-brand-secondary text-muted-foreground hover:text-white"
         >
           <LogOut className="h-6 w-6" />
