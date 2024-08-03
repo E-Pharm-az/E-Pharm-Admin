@@ -7,25 +7,30 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, ...props }, ref) => {
+  ({ className, type, label, disabled, ...props }, ref) => {
     return (
       <div className="relative w-full">
         <input
           type={type}
           className={cn(
-            "peer block w-full outline-0 rounded-lg border border-neutral-400 focus:border-black bg-neutral-50 text-gray-900 p-2.5 sm:text-sm transition-all disabled:bg-gray-100 disabled:cursor-not-allowed",
+            "peer w-full px-3 py-2.5 text-sm text-gray-900 bg-transparent rounded-lg border border-neutral-300",
+            "outline-none focus:ring-1 focus:ring-black focus:border-transparent",
+            "transition-all duration-200 ease-in-out placeholder-transparent",
+            "disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed",
             className,
           )}
-          placeholder=""
+          placeholder={label}
+          disabled={disabled}
           ref={ref}
           {...props}
         />
         <label
           className={cn(
-            "absolute left-0 w-full h-full select-none pointer-events-none flex transition-all",
-            "text-gray-500 peer-focus:text-gray-900 -left-0.5 -top-1.5 text-[11px] peer-placeholder-shown:text-sm",
-            "before:content-[' '] before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 before:transition-all ",
-            "after:content-[' '] after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 after:rounded-tr-md after:transition-all peer-placeholder-shown:after:border-transparent peer-placeholder-shown:leading-[3.75]",
+            "absolute left-3 -top-2.5 text-xs text-gray-600 bg-gray-50 px-1",
+            "transition-all duration-200 ease-in-out pointer-events-none",
+            disabled && "bg-muted text-muted-foreground",
+            "peer-placeholder-shown:text-base peer-placeholder-shown:font-normal peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2",
+            "peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-black ",
           )}
         >
           {label}

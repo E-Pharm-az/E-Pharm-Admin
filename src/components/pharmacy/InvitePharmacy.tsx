@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
 import { ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input.tsx";
 import { useContext, useEffect } from "react";
 import ErrorProvider from "@/context/ErrorProvider.tsx";
@@ -14,7 +14,6 @@ interface FormData {
 }
 
 const InvitePharmacy = () => {
-  const navigate = useNavigate();
   const { setError } = useContext(ErrorProvider);
   const { loading, setLoading } = useContext(LoaderContext);
   const axiosPrivate = useAxiosPrivate();
@@ -48,9 +47,11 @@ const InvitePharmacy = () => {
   return (
     <div className="w-1/3 mx-auto">
       <header className="flex items-center gap-2 w-full">
-        <button onClick={() => navigate("/dashboard/pharmacies")}>
-          <ArrowLeft />
-        </button>
+        <Button variant="ghost" size="icon" asChild>
+          <Link to="/dashboard/pharmacies">
+            <ArrowLeft />
+          </Link>
+        </Button>
         <h1 className="text-lg font-semibold md:text-2xl">Add Pharmacy</h1>
       </header>
       <form onSubmit={handleSubmit(onSubmit)} className=" mt-12 grid gap-4">

@@ -10,7 +10,7 @@ const DashboardLayout = () => {
           <Sidebar />
         </div>
       </div>
-      <div className="flex-1 flex flex-col bg-neutral-100 rounded-md">
+      <div className="flex-1 flex flex-col bg-neutral-50 rounded-md">
         <header className="md:hidden">
           <MobileSidebar />`
         </header>

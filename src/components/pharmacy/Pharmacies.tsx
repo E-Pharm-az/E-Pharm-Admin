@@ -58,14 +58,14 @@ const Pharmacies = () => {
   const axiosPrivate = useAxiosPrivate();
   const { setLoading } = useContext(LoaderContext);
   const { setError } = useContext(ErrorContext);
-  const [pharmacies, setPharamcies] = useState<Pharmacy[]>([]);
+  const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
         const response = await axiosPrivate.get<Pharmacy[]>(`/pharmacy`);
-        setPharamcies(response.data);
+        setPharmacies(response.data);
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response) {

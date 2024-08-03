@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -8,7 +9,6 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -16,37 +16,49 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table.tsx";
-import { Button } from "@/components/ui/button.tsx";
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
   ListFilter,
   Search,
+  Trash2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
-import { Separator } from "@/components/ui/separator.tsx";
-import {FormInput} from "@/components/ui/form-input.tsx";
+} from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { FormInput } from "@/components/ui/form-input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface DataTableProps<TData, TValue> {
   name: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isLoading: boolean;
+  onDelete: (ids: number[]) => void;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: number; name?: string }, TValue>({
   name,
   columns,
   data,
+  onDelete,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -54,6 +66,8 @@ export function DataTable<TData, TValue>({
   const [columnNames, setColumnNames] = useState<string[]>([]);
   const [desc, setDesc] = useState<boolean>(false);
   const [selectedColumn, setSelectedColumn] = useState<string>("");
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<TData[]>([]);
 
   const table = useReactTable({
     data,
@@ -103,6 +117,19 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  const handleDeleteConfirmation = () => {
+    const selectedIds = selectedRows.map((row) => row.id);
+    onDelete(selectedIds);
+    setShowDeleteConfirmation(false);
+    setSelectedRows([]);
+  };
+
+  useEffect(() => {
+    setSelectedRows(
+      table.getSelectedRowModel().flatRows.map((row) => row.original),
+    );
+  }, [table.getSelectedRowModel().flatRows]);
+
   return (
     <div className="border rounded-md bg-white">
       <div className="p-2 border-b flex justify-between space-x-2">
@@ -122,83 +149,99 @@ export function DataTable<TData, TValue>({
           </div>
         )}
         <div className="space-x-2 flex ml-auto">
-          {showSearch ? (
+          {selectedRows.length > 0 ? (
             <Button
-              onClick={handleCancelSearch}
+              onClick={() => setShowDeleteConfirmation(true)}
               size="sm"
               variant="destructive"
-              className="px-2 h-8 w-16"
+              className="px-2 h-8"
             >
-              Cancel
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete ({selectedRows.length})
             </Button>
           ) : (
-            <Button
-              onClick={() => setShowSearch(true)}
-              size="sm"
-              variant="outline"
-              className="px-2 space-x-2 h-8 w-16"
-            >
-              <Search className="h-4 w-4" />
-              <ListFilter className="h-4 w-4" />
-            </Button>
-          )}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button size="sm" variant="outline" className="px-2 h-8">
-                <ArrowUpDown className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40 p-3 mr-8 grid gap-3">
-              <h4 className="font-medium leading-none mb-1">Sort by</h4>
-              <RadioGroup defaultValue="name">
-                {columnNames.map((columnName, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      onClick={() => handleSort(columnName.toLowerCase())}
-                      value={columnName.toLowerCase()}
-                    />
-                    <Label>{columnName}</Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              <Separator />
+            <>
+              {showSearch ? (
+                <Button
+                  onClick={handleCancelSearch}
+                  size="sm"
+                  variant="destructive"
+                  className="px-2 h-8 w-16"
+                >
+                  Cancel
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => setShowSearch(true)}
+                  size="sm"
+                  variant="outline"
+                  className="px-2 space-x-2 h-8 w-16"
+                >
+                  <Search className="h-4 w-4" />
+                  <ListFilter className="h-4 w-4" />
+                </Button>
+              )}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button size="sm" variant="outline" className="px-2 h-8">
+                    <ArrowUpDown className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-40 p-3 mr-8 grid gap-3">
+                  <h4 className="font-medium leading-none mb-1">Sort by</h4>
+                  <RadioGroup defaultValue="name">
+                    {columnNames.map((columnName, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          onClick={() => handleSort(columnName.toLowerCase())}
+                          value={columnName.toLowerCase()}
+                        />
+                        <Label>{columnName}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                  <Separator />
 
-              <div className="grid gap-2">
-                <button
-                  className={`h-8 px-3 space-x-2 justify-start text-xs inline-flex items-center rounded-md font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground ${!desc && "bg-accent text-accent-foreground"}`}
-                  onClick={() => handleOrder(false)}
-                >
-                  <ArrowUp className="h-4 w-4" />
-                  <p>Ascending</p>
-                </button>
-                <button
-                  onClick={() => handleOrder(true)}
-                  className={`h-8 px-3 space-x-2 justify-start text-xs inline-flex items-center rounded-md font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground ${desc && "bg-accent text-accent-foreground"}`}
-                >
-                  <ArrowDown className="h-4 w-4" />
-                  <p>Descending</p>
-                </button>
-              </div>
-            </PopoverContent>
-          </Popover>
+                  <div className="grid gap-2">
+                    <button
+                      className={`h-8 px-3 space-x-2 justify-start text-xs inline-flex items-center rounded-md font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground ${
+                        !desc && "bg-accent text-accent-foreground"
+                      }`}
+                      onClick={() => handleOrder(false)}
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                      <p>Ascending</p>
+                    </button>
+                    <button
+                      onClick={() => handleOrder(true)}
+                      className={`h-8 px-3 space-x-2 justify-start text-xs inline-flex items-center rounded-md font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground ${
+                        desc && "bg-accent text-accent-foreground"
+                      }`}
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                      <p>Descending</p>
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </>
+          )}
         </div>
       </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>
@@ -225,6 +268,33 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <AlertDialog
+        open={showDeleteConfirmation}
+        onOpenChange={setShowDeleteConfirmation}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              selected items:
+              <ul className="list-disc list-inside mt-2">
+                {selectedRows.map((row) => (
+                  <li key={row.id}>{row?.name}</li>
+                ))}
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirmation}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
