@@ -7,8 +7,6 @@ import AuthLayout from "@/layouts/AuthLayout.tsx";
 import DashboardLayout from "@/layouts/DashboardLayout.tsx";
 import { RemoveTrailingSlash } from "@/components/RemoveTrailingSlash.tsx";
 import Pharmacies from "@/components/pharmacy/Pharmacies.tsx";
-import InvitePharmacy from "@/components/pharmacy/InvitePharmacy.tsx";
-import RegisterPharmacy from "@/components/pharmacy/RegisterPharmacy.tsx";
 import Products from "@/components/product/Products.tsx";
 import ClinicalInfo from "@/components/clinical/ClinicalInfo.tsx";
 import ClinicalInfoPage from "@/components/clinical/ClinicalInfoPage.tsx";
@@ -43,14 +41,6 @@ function App() {
             <Route path="dashboard" element={<DashboardLayout />}>
               <Route index element={<Navigate to="/dashboard/pharmacies" />} />
               <Route path="pharmacies" element={<Pharmacies />} />
-              <Route
-                path="pharmacies/invite-pharmacy"
-                element={<InvitePharmacy />}
-              />
-              <Route
-                path="pharmacies/register"
-                element={<RegisterPharmacy />}
-              />
               <Route path="products" element={<Products />} />
               <Route path="clinical-info" element={<ClinicalInfo />} />
               <Route

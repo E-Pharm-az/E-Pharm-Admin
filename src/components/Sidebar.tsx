@@ -57,9 +57,9 @@ const Sidebar = () => {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="lucide lucide-chart-no-axes-column"
         >
           <line x1="18" x2="18" y1="20" y2="10" />

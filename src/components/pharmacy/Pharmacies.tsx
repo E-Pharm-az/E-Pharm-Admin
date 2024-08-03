@@ -1,23 +1,14 @@
-import { Button } from "@/components/ui/button.tsx";
-import { Link } from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { DataTable } from "@/components/ui/data-table.tsx";
-import {Plus} from "lucide-react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import ErrorContext from "@/context/ErrorProvider.tsx";
-import {AxiosError} from "axios";
-
-interface Pharmacy {
-  id: number;
-  name: string;
-  tin: string;
-  phone: string;
-  email: string;
-  address: string;
-}
+import { AxiosError } from "axios";
+import { Pharmacy } from "@/types/pharmacy.ts";
+import InvitePharmacyModal from "@/components/pharmacy/InvitePharmacyModal.tsx";
+import { Clock } from "lucide-react";
 
 const columns: ColumnDef<Pharmacy>[] = [
   {
@@ -43,14 +34,35 @@ const columns: ColumnDef<Pharmacy>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => row.getValue("id"),
   },
   {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => <div>{row.getValue("email")}</div>,
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => {
+      const name = row.getValue("name");
+      return name ? String(name) : "NOT_INITIALISED";
+    },
+  },
+  {
+    accessorKey: "ownerEmail",
+    header: "Owner email",
+    cell: ({ row }) => {
+      const email = row.getValue("ownerEmail");
+      return email ? String(email) : "NOT_INITIALISED";
+    },
+  },
+  {
+    id: "isActive",
+    cell: ({ row }) =>
+      !row.original.isActive && (
+        <div className="ml-auto flex w-min items-center justify-center rounded-full border border-yellow-400 bg-yellow-300 px-2 py-1 text-center text-xs text-nowrap space-x-1.5">
+          <Clock className="h-4 w-4" />
+          <p>Inactive</p>
+        </div>
+      ),
   },
 ];
 
@@ -60,42 +72,41 @@ const Pharmacies = () => {
   const { setError } = useContext(ErrorContext);
   const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const response = await axiosPrivate.get<Pharmacy[]>(`/pharmacy`);
-        setPharmacies(response.data);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          if (error.response) {
-            if (error.response.status !== 404) {
-              setError(error.response?.data);
-            }
-          }
-        } else {
-          setError("Unexpected error");
+  const fetchPharmacies = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosPrivate.get<Pharmacy[]>(`/pharmacy`);
+      setPharmacies(response.data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response && error.response.status !== 404) {
+          setError(error.response?.data);
         }
+      } else {
+        setError("Unexpected error");
       }
-      finally {
-        setLoading(false);
-      }
-    })();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPharmacies();
   }, []);
 
   const handleDelete = async (ids: number[]) => {
     setLoading(true);
     try {
       await Promise.all(
-          ids.map((id) => axiosPrivate.delete(`/pharmacy/${id}`)),
+        ids.map((id) => axiosPrivate.delete(`/pharmacy/${id}`)),
       );
       setPharmacies((prevPharmacies) =>
-          prevPharmacies.filter((pharmacy) => !ids.includes(pharmacy.id)),
+        prevPharmacies.filter((pharmacy) => !ids.includes(pharmacy.id)),
       );
     } catch (error) {
       if (error instanceof AxiosError) {
         setError(
-            error.response?.data || "An error occurred while deleting the items",
+          error.response?.data || "An error occurred while deleting the items",
         );
       } else {
         setError("Unexpected error occurred while deleting the items");
@@ -109,12 +120,7 @@ const Pharmacies = () => {
     <div className="p-6 space-y-6 h-full">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Pharmacies</h1>
-        <Button asChild>
-          <Link to="/dashboard/pharmacies/invite-pharmacy">
-            <Plus className="w-4 h-4" />
-            <p>Add Pharmacy</p>
-          </Link>
-        </Button>
+        <InvitePharmacyModal onPharmacyInvited={fetchPharmacies}/>
       </div>
       <DataTable
         name="Pharmacies"

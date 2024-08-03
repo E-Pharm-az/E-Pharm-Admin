@@ -280,12 +280,12 @@ export function DataTable<TData extends { id: number; name?: string }, TValue>({
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
               selected items:
-              <ul className="list-disc list-inside mt-2">
-                {selectedRows.map((row) => (
-                  <li key={row.id}>{row?.name}</li>
-                ))}
-              </ul>
             </AlertDialogDescription>
+            <ul className="list-disc list-inside mt-2">
+              {selectedRows.map((row) => (
+                <li className="text-sm text-muted-foreground" key={row.id}>{row?.name}</li>
+              ))}
+            </ul>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
