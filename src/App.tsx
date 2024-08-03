@@ -26,6 +26,7 @@ import { IndicationForm } from "@/components/clinical/forms/IndicationForm.tsx";
 import { RouteOfAdministrationForm } from "@/components/clinical/forms/RouteOfAdministrationForm.tsx";
 import { UsageWarningForm } from "@/components/clinical/forms/UsageWarningForm.tsx";
 import { SideEffectForm } from "@/components/clinical/forms/SideEffectForm.tsx";
+import Analytics from "@/components/ui/Analytics.tsx";
 
 function App() {
   return (
@@ -112,6 +113,7 @@ function App() {
                   />
                 }
               />
+              <Route path="analytics" element={<Analytics />} />
             </Route>
           </Route>
         </Route>

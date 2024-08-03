@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import {useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import ErrorProvider from "@/context/ErrorProvider.tsx";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate.ts";
@@ -66,7 +66,7 @@ const RegisterPharmacy = () => {
   }, []);
 
   return (
-    <div className="w-1/3 mx-auto">
+    <div className="w-full max-w-[796px] mx-auto">
       <header className="flex items-center gap-2 w-full">
         <button onClick={() => navigate("/dashboard/pharmacies")}>
           <ArrowLeft />

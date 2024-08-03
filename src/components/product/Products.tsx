@@ -8,7 +8,7 @@ import ErrorContext from "@/context/ErrorProvider.tsx";
 import { AxiosError } from "axios";
 import { DataTable } from "@/components/ui/data-table.tsx";
 import ProductView from "@/components/product/ProductView.tsx";
-import {Product} from "@/types/product.ts";
+import { Product } from "@/types/product.ts";
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -56,8 +56,7 @@ const columns: ColumnDef<Product>[] = [
   },
   {
     id: "viewMore",
-    cell: ({ row }) =>
-       <ProductView productId={row.original.id} />,
+    cell: ({ row }) => <ProductView productId={row.original.id} />,
   },
   {
     id: "approvalState",
@@ -81,7 +80,7 @@ const Products = () => {
     (async () => {
       setLoading(true);
       try {
-        const response = await axiosPrivate.get<Product[]>(`/product/?page=1`);
+        const response = await axiosPrivate.get<Product[]>(`/products/?page=1`);
         setProducts(response.data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -99,6 +98,28 @@ const Products = () => {
     })();
   }, []);
 
+  const handleDelete = async (ids: number[]) => {
+    setLoading(true);
+    try {
+      await Promise.all(
+        ids.map((id) => axiosPrivate.delete(`/products/${id}`)),
+      );
+      setProducts((prevProducts) =>
+        prevProducts.filter((products) => !ids.includes(products.id)),
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(
+          error.response?.data || "An error occurred while deleting the items",
+        );
+      } else {
+        setError("Unexpected error occurred while deleting the items");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6 h-full">
       <h1 className="text-lg font-semibold md:text-2xl">Products</h1>
@@ -107,6 +128,7 @@ const Products = () => {
         columns={columns}
         data={products}
         isLoading={loading}
+        onDelete={handleDelete}
       />
     </div>
   );

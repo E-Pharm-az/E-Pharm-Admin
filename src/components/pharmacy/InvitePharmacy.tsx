@@ -45,7 +45,7 @@ const InvitePharmacy = () => {
   };
 
   return (
-    <div className="w-1/3 mx-auto">
+    <div className="w-full max-w-[796px] mx-auto">
       <header className="flex items-center gap-2 w-full">
         <Button variant="ghost" size="icon" asChild>
           <Link to="/dashboard/pharmacies">

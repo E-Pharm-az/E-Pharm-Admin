@@ -83,6 +83,28 @@ const Pharmacies = () => {
     })();
   }, []);
 
+  const handleDelete = async (ids: number[]) => {
+    setLoading(true);
+    try {
+      await Promise.all(
+          ids.map((id) => axiosPrivate.delete(`/pharmacy/${id}`)),
+      );
+      setPharmacies((prevPharmacies) =>
+          prevPharmacies.filter((pharmacy) => !ids.includes(pharmacy.id)),
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(
+            error.response?.data || "An error occurred while deleting the items",
+        );
+      } else {
+        setError("Unexpected error occurred while deleting the items");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6 h-full">
       <div className="flex items-center justify-between">
@@ -99,6 +121,7 @@ const Pharmacies = () => {
         columns={columns}
         data={pharmacies}
         isLoading={false}
+        onDelete={handleDelete}
       />
     </div>
   );
