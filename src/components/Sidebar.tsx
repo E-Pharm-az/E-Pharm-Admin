@@ -78,7 +78,7 @@ const Sidebar = () => {
       </div>
       <div className="mt-auto">
         <button
-          onClick={logout}
+          onClick={() => logout()}
           className="p-3 rounded-lg transition-colors hover:text-primary hover:bg-brand-secondary text-muted-foreground hover:text-white"
         >
           <LogOut className="h-6 w-6" />
