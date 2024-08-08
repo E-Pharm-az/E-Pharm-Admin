@@ -1,16 +1,17 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
-// const BASE_URL = "https://localhost:7074/api";
-const BASE_URL = "https://api.e-pharm.co/api";
+dotenv.config();
+const BASE_URL = process.env.API_BASE_URL;
 
 const apiClient = axios.create({
     baseURL: BASE_URL,
 });
 
 export const axiosPrivate = axios.create({
-  baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true,
+    baseURL: BASE_URL,
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
 });
 
 export default apiClient;
