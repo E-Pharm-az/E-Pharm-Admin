@@ -10,7 +10,7 @@ const useRefreshToken = () => {
   const { setAuth } = useContext(AuthProvider);
 
   const refresh = async () => {
-    const response = await apiClient.get<TokenResponse>("/auth/refresh-token", {
+    const response = await apiClient.get<TokenResponse>("/auth/admin/refresh-token", {
       withCredentials: true,
     });
     const decodedToken = jwtDecode<TokenPayload>(response.data.token);

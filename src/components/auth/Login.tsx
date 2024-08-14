@@ -1,12 +1,10 @@
 import { useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import { AxiosError } from "axios";
-import AuthProvider, {TokenPayload, TokenResponse,} from "@/context/AuthProvider.tsx";
+import AuthProvider from "@/context/AuthProvider.tsx";
 import ErrorProvider from "@/context/ErrorProvider.tsx";
 import LoaderContext from "@/context/LoaderProvider.tsx";
 import { useForm } from "react-hook-form";
-import apiClient from "@/services/api-client.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 
@@ -16,7 +14,7 @@ interface PasswordFormData {
 }
 
 const Login = () => {
-  const { setAuth, isRefreshing, isAuthenticated } = useContext(AuthProvider);
+  const { isRefreshing, isAuthenticated, login } = useContext(AuthProvider);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/dashboard";
@@ -44,25 +42,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await apiClient.post<TokenResponse>(
-        "/auth/admin/login",
-        { email: data.email, password: data.password },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        },
-      );
-
-      const decodedToken = jwtDecode<TokenPayload>(response.data.token);
-
-      setAuth({
-        id: decodedToken.jti,
-        email: decodedToken.email,
-        firstname: decodedToken.sub,
-      });
-
+      await login(data.email, data.password);
       localStorage.setItem("persist", "true");
-
       navigate(from, { replace: true });
     } catch (error) {
       if (error instanceof AxiosError) {

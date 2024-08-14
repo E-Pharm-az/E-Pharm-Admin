@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
-    const response = await axiosPrivate.post("/auth/pharmacy/login", {
+    const response = await axiosPrivate.post("/auth/admin/login", {
       email,
       password,
     });
