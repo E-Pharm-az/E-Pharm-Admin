@@ -5,7 +5,7 @@ import useRefreshToken from "./useRefreshToken.ts";
 
 const useAxiosPrivate = () => {
   const refreshToken = useRefreshToken();
-  const { auth, logout } = useContext(AuthProvider);
+  const { user, logout } = useContext(AuthProvider);
 
   useEffect(() => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
@@ -48,7 +48,7 @@ const useAxiosPrivate = () => {
       axiosPrivate.interceptors.response.eject(responseInterceptor);
       axiosPrivate.interceptors.request.eject(requestInterceptor);
     };
-  }, [auth, refreshToken, logout]);
+  }, [user, refreshToken, logout]);
 
   return axiosPrivate;
 };

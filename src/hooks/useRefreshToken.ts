@@ -1,31 +1,23 @@
 import { useContext } from "react";
 import apiClient from "../services/api-client.ts";
-import { jwtDecode } from "jwt-decode";
-import AuthProvider, {
-  TokenPayload,
-  TokenResponse,
-} from "../context/AuthProvider.tsx";
+import AuthProvider, { User } from "../context/AuthProvider.tsx";
 
 const useRefreshToken = () => {
-  const { setAuth } = useContext(AuthProvider);
+  const { setUser } = useContext(AuthProvider);
 
   const refresh = async () => {
-    const response = await apiClient.get<TokenResponse>("/auth/admin/refresh-token", {
-      withCredentials: true,
-    });
-    const decodedToken = jwtDecode<TokenPayload>(response.data.token);
-
-    setAuth(() => {
-      return {
-        tokenResponse: response.data,
-        id: decodedToken.jti,
-        email: decodedToken.email,
-        firstname: decodedToken.sub,
-      };
-    });
-
-    return response.data.token;
+    try {
+      const response = await apiClient.get<User>("/auth/admin/refresh-token", {
+        withCredentials: true,
+      });
+      setUser(() => {
+        return response.data;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return refresh;
 };
 
